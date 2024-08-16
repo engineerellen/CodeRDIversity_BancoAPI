@@ -6,7 +6,8 @@ objContaPF1.VerSaldo();
 
 //instancia do objeto pessoa juridica
 //usar apenas a expressao new() para instanciar
-ContaPessoaJuridica objContaPJ1 = new() { RazaoSocial = "Empresa dos meus sonhos!"};
+ContaPessoaJuridica objContaPJ1 = new() { RazaoSocial = "Empresa dos meus sonhos!", Agencia="0001", NumeroConta="35698", Digito="0"};
+
 
 //downcasting
 Conta objPJ2 = objContaPJ1;

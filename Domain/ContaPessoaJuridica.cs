@@ -23,5 +23,26 @@ namespace Domain
             TipoConta = tipoConta;
             NomeConta = nomeConta;
         }
+
+        public override string Sacar(double value)
+        {
+            Console.WriteLine("Temos Ofertas especiais para sua empresa!");
+
+            return base.Sacar(value);
+        }
+
+        public override string Depositar(double value)
+        {
+            Console.WriteLine("Temos Ofertas especiais para sua empresa! Verifique com seu gerente!");
+
+            return base.Depositar(value);
+        }
+
+        public override double VerSaldo() => base.VerSaldo();//é o mesmo que
+        //public override double VerSaldo()
+        //{
+        //    base.VerSaldo();
+
+        //}
     }
 }
