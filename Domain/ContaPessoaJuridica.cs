@@ -14,20 +14,14 @@ namespace Domain
         public double ValorInicial { get; set; }
         public double FaturamentoMedio { get; set; }
 
+
         public ContaPessoaJuridica()
-        {
+        { }
 
-
-        }
-
-        public ContaPessoaJuridica(string nomeConta)
-        {
-            NomeConta = nomeConta;
-        }
-
-        public ContaPessoaJuridica(ETipoConta tipoConta)
+        public ContaPessoaJuridica(string nomeConta, ETipoConta tipoConta)
         {
             TipoConta = tipoConta;
+            NomeConta = nomeConta;
         }
     }
 }

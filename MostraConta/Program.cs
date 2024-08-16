@@ -1,11 +1,12 @@
 ﻿using Domain;
 
 //objeto da classe conta com upcasting
-Conta objContaPF1 = new ContaPessoaFisica();
+Conta objContaPF1 = new ContaPessoaFisica() { ValorConta = 100 };
+objContaPF1.VerSaldo();
 
 //instancia do objeto pessoa juridica
-ContaPessoaJuridica objContaPJ1 = new ContaPessoaJuridica();
-objContaPJ1.RazaoSocial = "Empresa dos meus sonhos!";
+//usar apenas a expressao new() para instanciar
+ContaPessoaJuridica objContaPJ1 = new() { RazaoSocial = "Empresa dos meus sonhos!"};
 
 //downcasting
 Conta objPJ2 = objContaPJ1;

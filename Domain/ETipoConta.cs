@@ -12,5 +12,4 @@ namespace Domain
         Poupanca = 2,
         Investimento = 3
     };
-
 }

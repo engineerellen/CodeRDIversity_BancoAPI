@@ -3,15 +3,18 @@
     public abstract class Conta : IConta
     {
         private double _valorConta;
-        private ETipoConta _tipoConta;
 
-        protected int Codigo {get; set;}
+        protected int Codigo { get; set; }
+        public string Agencia { get; set; } = "0001";
+        public string NumeroConta { get; set; } = string.Empty;
+        public string Digito { get; set; } = "0";
+        public string? Pix { get; set; }
         public double ValorConta { get; set; } = 0;
         public string NomeConta { get; set; } = "Conta1";
         public ETipoConta TipoConta { get; set; } = ETipoConta.Corrente;
 
 
-        public string Sacar(double valor)
+        public virtual string Sacar(double valor)
         {
             if (_valorConta > 0 && valor <= _valorConta)
             {
@@ -26,7 +29,7 @@
                 return "Não foi possível realizar o saque!";
         }
 
-        public string Depositar(double valor)
+        public virtual string Depositar(double valor)
         {
             _valorConta += valor;
             // ou fazer desta forma:
@@ -35,15 +38,17 @@
             return "Depósito efetuado com sucesso!";
         }
 
-        public double VerSaldo()
+        public virtual double VerSaldo()
         {
             return _valorConta;
         }
 
-        public void SetarNome()
-        { }
+        public virtual void SetarNome(string nome)
+        {
+            NomeConta = nome;
+        }
 
-        public List<Conta> VerExtrato()
+        public static List<Conta> VerExtrato()
         {
             return new List<Conta>();
         }

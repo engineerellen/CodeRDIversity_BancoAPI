@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class ContaPessoaFisica:Conta
+    public class ContaPessoaFisica : Conta
     {
         public string NomeCliente { get; set; }
         public string CPF { get; set; }
@@ -16,35 +16,33 @@ namespace Domain
         public string Profissao { get; set; }
 
         public double RendaFamiliar { get; set; }
+
+
         //construtor da classe Conta
         public ContaPessoaFisica()
         {
-        
 
         }
-
-        public ContaPessoaFisica(string nomeConta)
+        public ContaPessoaFisica(string nomeConta, ETipoConta tipoConta)
         {
-           // _nomeConta = nomeConta;
+            NomeConta = nomeConta;
+            this.TipoConta = tipoConta;
         }
 
-        public ContaPessoaFisica(ETipoConta tipoConta)
-        {
-          //this._tipoConta = tipoConta;
-        }
-
-        public virtual string Sacar(double value)
+        public override string Sacar(double value)
         {
             return base.Sacar(value);
         }
 
-        public virtual string Depositar(double value)
+        public override string Depositar(double value)
         {
             return base.Depositar(value);
         }
-        public virtual double VerSaldo()
+        public override double VerSaldo()
         {
-           return base.VerSaldo();
+            return base.VerSaldo();
         }
-      }
+
+        public override sealed void SetarNome(string nome) => base.SetarNome(nome);
+    }
 }
