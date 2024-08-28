@@ -12,9 +12,12 @@
         string NomeConta { get; set; }
 
         //métodos
-        string Sacar(double valor);
-        string Depositar(double valor);
+        void Sacar(double valor);
+        void Depositar(double valor);
         double VerSaldo();
         void SetarNome(string nome);
+        void Transferir(Conta conta);
+
+        void EncerrarConta(int codigoConta);
     }
 }

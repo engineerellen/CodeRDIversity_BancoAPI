@@ -1,22 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Domain
 {
     public class ContaPessoaJuridica : Conta
     {
-        public string CNPJ { get; set; }
-        public string RazaoSocial { get; set; }
-        public string NomeFantasia { get; set; }
+        [Required]
+        public string CNPJ { get; set; } = string.Empty;
+
+        [Required]
+        public string RazaoSocial { get; set; } = string.Empty;
+
+        public string NomeFantasia { get; set; } = string.Empty;
+
+        [Required]
         public double ValorInicial { get; set; }
         public double FaturamentoMedio { get; set; }
 
 
         public ContaPessoaJuridica()
-        { }
+        {
+        }
 
         public ContaPessoaJuridica(string nomeConta, ETipoConta tipoConta)
         {
@@ -24,19 +27,10 @@ namespace Domain
             NomeConta = nomeConta;
         }
 
-        public override string Sacar(double value)
-        {
-            Console.WriteLine("Temos Ofertas especiais para sua empresa!");
+        public override void Sacar(double value) => base.Sacar(value);
 
-            return base.Sacar(value);
-        }
 
-        public override string Depositar(double value)
-        {
-            Console.WriteLine("Temos Ofertas especiais para sua empresa! Verifique com seu gerente!");
-
-            return base.Depositar(value);
-        }
+        public override void Depositar(double value) => base.Depositar(value);
 
         public override double VerSaldo() => base.VerSaldo();//é o mesmo que
         //public override double VerSaldo()
@@ -44,5 +38,6 @@ namespace Domain
         //    base.VerSaldo();
 
         //}
+        public override void Transferir(Conta contaPara) => base.Transferir(contaPara);
     }
 }

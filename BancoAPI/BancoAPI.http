@@ -1,0 +1,6 @@
+@BancoAPI_HostAddress = http://localhost:5278
+
+GET {{BancoAPI_HostAddress}}/bancoAPI/
+Accept: application/json
+
+###
