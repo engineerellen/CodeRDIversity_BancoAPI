@@ -7,13 +7,13 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Repository
 {
-    public class ContaPessoaFiscaRepository
+    public class ContaPessoaFiscaRepositoryADO
     {
         IConfiguration _configuration;
         string connectionString;
 
 
-        public ContaPessoaFiscaRepository(IConfiguration configuration)
+        public ContaPessoaFiscaRepositoryADO(IConfiguration configuration)
         {
             _configuration = configuration;
             connectionString = _configuration.GetConnectionString("DefaultConnection") ?? string.Empty;

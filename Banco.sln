@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MostraConta", "MostraConta\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BancoAPI", "BancoAPI\BancoAPI.csproj", "{52792BF7-A955-4C34-932A-09F3A6BB6A32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{92586CF8-2770-4BCA-B0E5-2FD8F74D79A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryADO", "Repository\RepositoryADO.csproj", "{92586CF8-2770-4BCA-B0E5-2FD8F74D79A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

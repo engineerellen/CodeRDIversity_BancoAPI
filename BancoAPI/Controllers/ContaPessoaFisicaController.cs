@@ -12,12 +12,12 @@ namespace BancoAPI.Controllers
         Conta conta;
 
         IConfiguration _configuration;
-        ContaPessoaFiscaRepository _repository;
+        ContaPessoaFiscaRepositoryADO _repositoryADO;
 
         public ContaPessoaFisicaController(IConfiguration configuration)
         {
             _configuration = configuration;
-            _repository = new ContaPessoaFiscaRepository(_configuration);
+            _repositoryADO = new ContaPessoaFiscaRepositoryADO(_configuration);
 
             conta = new ContaPessoaFisica("Aposentadoria", ETipoConta.Investimento);
             conta.Agencia = "0001";
@@ -33,7 +33,7 @@ namespace BancoAPI.Controllers
         {
             try
             {
-                return _repository.RetornarContasPF(ETipoConta.Corrente);
+                return _repositoryADO.RetornarContasPF(ETipoConta.Corrente);
             }
             catch (Exception ex)
             {
@@ -60,7 +60,7 @@ namespace BancoAPI.Controllers
         {
             try
             {
-                _repository.CadastrarContasPF(contaPessoaFisica);
+                _repositoryADO.CadastrarContasPF(contaPessoaFisica);
                 return Ok("Conta cadastrada com sucesso!");
             }
             catch (Exception ex)
@@ -111,7 +111,7 @@ namespace BancoAPI.Controllers
         {
             try
             {
-                _repository.InativarContasPF(contaPessoaFisica);
+                _repositoryADO.InativarContasPF(contaPessoaFisica);
                 return Ok("Conta encerrada com sucesso!");
             }
             catch (Exception ex)
