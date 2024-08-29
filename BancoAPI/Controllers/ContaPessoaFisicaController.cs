@@ -1,6 +1,7 @@
 ﻿using BancoAPI.DTO;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
+using Repository;
 
 namespace BancoAPI.Controllers
 {
@@ -9,11 +10,18 @@ namespace BancoAPI.Controllers
     public class ContaPessoaFisicaController : ControllerBase
     {
         Conta conta;
-        public ContaPessoaFisicaController()
+
+        IConfiguration _configuration;
+        ContaPessoaFiscaRepository _repository;
+
+        public ContaPessoaFisicaController(IConfiguration configuration)
         {
+            _configuration = configuration;
+            _repository = new ContaPessoaFiscaRepository(_configuration);
+
             conta = new ContaPessoaFisica("Aposentadoria", ETipoConta.Investimento);
             conta.Agencia = "0001";
-            conta.Codigo = 1;
+            conta.ID = 1;
             conta.Digito = "1";
             conta.NumeroConta = " 2345678";
             conta.Pix = "(11)99999-9999";
@@ -21,15 +29,14 @@ namespace BancoAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<double> Get()
+        public ActionResult<List<ContaPessoaFisica>> Get()
         {
             try
             {
-                return conta.VerSaldo();
+                return _repository.RetornarContasPF(ETipoConta.Corrente);
             }
             catch (Exception ex)
             {
-
                 return BadRequest(ex.Message);
             }
 
@@ -41,6 +48,20 @@ namespace BancoAPI.Controllers
             try
             {
                 return conta.VerExtrato(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] ContaPessoaFisica contaPessoaFisica)
+        {
+            try
+            {
+                _repository.CadastrarContasPF(contaPessoaFisica);
+                return Ok("Conta cadastrada com sucesso!");
             }
             catch (Exception ex)
             {
@@ -86,11 +107,11 @@ namespace BancoAPI.Controllers
         }
 
         [HttpDelete("{codigoConta}")]
-        public IActionResult Delete(int codigoConta)
+        public IActionResult Delete([FromBody] ContaPessoaFisica contaPessoaFisica)
         {
             try
             {
-                conta.EncerrarConta(codigoConta);
+                _repository.InativarContasPF(contaPessoaFisica);
                 return Ok("Conta encerrada com sucesso!");
             }
             catch (Exception ex)

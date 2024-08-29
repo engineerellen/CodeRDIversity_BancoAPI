@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MostraConta", "MostraConta\MostraConta.csproj", "{E2C3C5E5-318C-41CB-839B-19E98FB40B78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BancoAPI", "BancoAPI\BancoAPI.csproj", "{52792BF7-A955-4C34-932A-09F3A6BB6A32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BancoAPI", "BancoAPI\BancoAPI.csproj", "{52792BF7-A955-4C34-932A-09F3A6BB6A32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{92586CF8-2770-4BCA-B0E5-2FD8F74D79A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{52792BF7-A955-4C34-932A-09F3A6BB6A32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52792BF7-A955-4C34-932A-09F3A6BB6A32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52792BF7-A955-4C34-932A-09F3A6BB6A32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92586CF8-2770-4BCA-B0E5-2FD8F74D79A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92586CF8-2770-4BCA-B0E5-2FD8F74D79A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92586CF8-2770-4BCA-B0E5-2FD8F74D79A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92586CF8-2770-4BCA-B0E5-2FD8F74D79A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,8 +6,7 @@ namespace Domain
     {
         private double _valorConta = 0;
 
-        [Required]
-        public int Codigo { get; set; }
+        public int ID { get; set; }
 
         [Required]
         public string Agencia { get; set; } = "0001";
@@ -39,6 +38,8 @@ namespace Domain
 
         [Required]
         public ETipoConta TipoConta { get; set; } = ETipoConta.Corrente;
+
+        public string DescricaoTipoConta { get; set; } = string.Empty;
 
         public virtual void Sacar(double valor)
         {
@@ -79,7 +80,7 @@ namespace Domain
             if (ValorConta < 0)
                 throw new Exception("Não é possivel encerrar a conta, Verifique seu saldo!");
 
-            Codigo = codigoConta;
+            ID = codigoConta;
             EstaAtiva = false;
         }
     }

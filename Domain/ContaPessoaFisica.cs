@@ -11,15 +11,18 @@ namespace Domain
     public class ContaPessoaFisica : Conta
     {
         [Required]
+        public int ID_PF { get; set; }
+
+        [Required]
         public string NomeCliente { get; set; } = string.Empty;
 
         [Required]
-        public string CPF { get; set; }=string.Empty;
+        public string CPF { get; set; } = string.Empty;
 
         public string Genero { get; set; } = string.Empty;
 
         [Required]
-        public string Endereco { get; set; }=string.Empty;
+        public string Endereco { get; set; } = string.Empty;
         public string Profissao { get; set; } = string.Empty;
 
         public double RendaFamiliar { get; set; }
