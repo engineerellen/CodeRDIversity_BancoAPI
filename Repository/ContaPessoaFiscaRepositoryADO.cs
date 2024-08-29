@@ -18,7 +18,7 @@ namespace Repository
             _configuration = configuration;
             connectionString = _configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
         }
-        public List<ContaPessoaFisica> RetornarContasPF(ETipoConta eTipoConta)
+        public List<ContaPessoaFisica> RetornarContasPF()
         {
             var listaContas = new List<ContaPessoaFisica>();
 
@@ -48,14 +48,11 @@ namespace Repository
                     query.AppendLine("FROM CONTA_PESSOA_FISICA PF");
                     query.AppendLine("INNER JOIN CONTA CC ON(PF.ID_CONTA = CC.ID_CONTA)");
                     query.AppendLine("INNER JOIN TIPO_CONTA TP ON(TP.ID_TIPO_CONTA = CC.ID_TIPO_CONTA)");
-                    query.AppendLine("WHERE CODIGO = @codigo");
+
 
                     //command
                     SqlCommand cmd = new SqlCommand(query.ToString(), connection);
                     cmd.CommandType = CommandType.Text;
-
-                    //parametro da consulta
-                    cmd.Parameters.AddWithValue("@codigo", (int)eTipoConta);
 
                     //abre a conexao
                     connection.Open();
@@ -140,7 +137,7 @@ namespace Repository
                     InserirConta(conta, transacao, conexao);
 
                     //obtem o id da conta cadastrado na inserção acima
-                    conta.ID= ConsultarConta(conta, transacao, conexao);
+                    conta.ID = ConsultarConta(conta, transacao, conexao);
 
                     //adiciona o id da conta como parametro
                     cmdContaPF.Parameters.AddWithValue("@ID_CONTA", conta.ID);
@@ -170,11 +167,13 @@ namespace Repository
         private int ConsultarConta(ContaPessoaFisica conta, SqlTransaction? transacao, SqlConnection conexao)
         {
             //consulta o id cadastrado
-            SqlCommand cmdconsulta = new SqlCommand("SELECT MAX(ID_CONTA) ID_CONTA FROM CONTA WHERE Agencia = @Agencia AND NumeroConta = @NumeroConta", conexao);
+            SqlCommand cmdconsulta = new SqlCommand("SELECT MAX(ID_CONTA) ID_CONTA FROM CONTA WHERE Agencia = @Agencia AND NumeroConta = @NumeroConta AND Digito = @Digito AND ID_TIPO_CONTA = @ID_TIPO_CONTA", conexao);
             cmdconsulta.CommandType = CommandType.Text;
 
             cmdconsulta.Parameters.AddWithValue("@Agencia", conta.Agencia);
             cmdconsulta.Parameters.AddWithValue("@NumeroConta", conta.NumeroConta);
+            cmdconsulta.Parameters.AddWithValue("@Digito", conta.Digito);
+            cmdconsulta.Parameters.AddWithValue("@ID_TIPO_CONTA", (int)conta.TipoConta);
 
             cmdconsulta.Transaction = transacao;
             SqlDataReader contaPFDataReader = cmdconsulta.ExecuteReader();
@@ -184,10 +183,10 @@ namespace Repository
 
             contaPFDataReader.Close();
 
-            return conta.ID;    
+            return conta.ID;
         }
 
-        private void InserirConta(ContaPessoaFisica conta,SqlTransaction? transacao,SqlConnection conexao)
+        private void InserirConta(ContaPessoaFisica conta, SqlTransaction? transacao, SqlConnection conexao)
         {
             //insert da tabela conta
             var comandoSQLConta = new StringBuilder();

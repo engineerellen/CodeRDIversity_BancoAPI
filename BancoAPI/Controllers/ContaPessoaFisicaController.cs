@@ -33,7 +33,7 @@ namespace BancoAPI.Controllers
         {
             try
             {
-                return _repositoryADO.RetornarContasPF(ETipoConta.Corrente);
+                return _repositoryADO.RetornarContasPF();
             }
             catch (Exception ex)
             {
