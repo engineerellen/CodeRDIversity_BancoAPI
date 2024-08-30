@@ -160,9 +160,7 @@ namespace Services
             try
             {
                 if (idContaPF == 0)
-                {
                     return null;
-                }
 
                 var pf = _contexto.ContaPessoaFisicas.Where(x => x.IdContaPf == idContaPF).ToList();
                 pessoaFisica = pf.FirstOrDefault();
