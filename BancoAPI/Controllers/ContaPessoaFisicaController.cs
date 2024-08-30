@@ -1,5 +1,4 @@
-﻿using BancoAPI.DTO;
-using Domain;
+﻿using Domain;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryEntity;
 using RepositoryEntity.Context;
@@ -24,11 +23,11 @@ namespace BancoAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Domain.ContaPessoaFisica>> Get()
+        public ActionResult<List<ContaPessoaFisicaDomain>> Get()
         {
             try
             {
-                return _service.GetAllContasPessoasFisica()??new List<Domain.ContaPessoaFisica>();
+                return _service.GetAllContasPessoasFisica()??new List<ContaPessoaFisicaDomain>();
             }
             catch (Exception ex)
             {
@@ -50,7 +49,7 @@ namespace BancoAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Domain.ContaPessoaFisica contaPessoaFisica)
+        public IActionResult Post([FromBody] ContaPessoaFisicaDomain contaPessoaFisica)
         {
             try
             {
@@ -63,28 +62,8 @@ namespace BancoAPI.Controllers
             }
         }
 
-        [HttpPost("Transferir")]
-        public IActionResult Transferir([FromBody] ContaPara contaPara)
-        {
-            try
-            {
-                if (contaPara.TipoContaPFPJ != "PF")
-                    return BadRequest("Conta precisa ser pessoa física!");
-
-                var ctaPF = contaPara.TransferirConta(contaPara);
-                _service.AtualizarConta(ctaPF);
-                _service.CadastrarHistorico(ctaPF, ETipoTransacao.Transferencia);
-
-                return Ok("Transferido com sucesso!");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
         [HttpPost("Sacar")]
-        public IActionResult Sacar(decimal valorSaque, [FromBody] Domain.ContaPessoaFisica contaPessoaFisica)
+        public IActionResult Sacar(decimal valorSaque, [FromBody] ContaPessoaFisicaDomain contaPessoaFisica)
         {
             try
             {
@@ -101,7 +80,7 @@ namespace BancoAPI.Controllers
         }
 
         [HttpPost("Depositar")]
-        public IActionResult Depositar(decimal valorDeposito, [FromBody] Domain.ContaPessoaFisica contaPessoaFisica)
+        public IActionResult Depositar(decimal valorDeposito, [FromBody] ContaPessoaFisicaDomain contaPessoaFisica)
         {
             try
             {
@@ -122,7 +101,7 @@ namespace BancoAPI.Controllers
         {
             try
             {
-                Domain.ContaPessoaFisica contaPF = new() { IDConta = idConta, ID_ContaPF = idContaPF };
+                Domain.ContaPessoaFisicaDomain contaPF = new() { IDConta = idConta, ID_ContaPF = idContaPF };
                 contaPF.SetarNome(nomeConta);
 
                 _service.AtualizarConta(contaPF);
@@ -141,7 +120,7 @@ namespace BancoAPI.Controllers
         {
             try
             {
-                Domain.ContaPessoaFisica contaPF = new() { IDConta = idConta, ID_ContaPF = idContaPF };
+                Domain.ContaPessoaFisicaDomain contaPF = new() { IDConta = idConta, ID_ContaPF = idContaPF };
 
                 _service.InativarConta(contaPF);
                 return Ok("Conta encerrada com sucesso!");

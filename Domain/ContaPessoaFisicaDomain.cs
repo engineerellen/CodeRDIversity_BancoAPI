@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class ContaPessoaFisica : Conta
+    public class ContaPessoaFisicaDomain : Conta
     {
         [Required]
         public int ID_ContaPF { get; set; }
@@ -29,11 +29,11 @@ namespace Domain
 
 
         //construtor da classe ContaPF
-        public ContaPessoaFisica()
+        public ContaPessoaFisicaDomain()
         {
 
         }
-        public ContaPessoaFisica(string nomeConta, ETipoConta tipoConta)
+        public ContaPessoaFisicaDomain(string nomeConta, ETipoConta tipoConta)
         {
             NomeConta = nomeConta;
             this.TipoConta = tipoConta;

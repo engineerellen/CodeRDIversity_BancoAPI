@@ -18,7 +18,7 @@ namespace Services
             _configuration = configuration;
         }
 
-        public string CadastrarContaPesoaFisica(Domain.ContaPessoaFisica contaPFDomain)
+        public string CadastrarContaPesoaFisica(ContaPessoaFisicaDomain contaPFDomain)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace Services
                         _contexto.Add(conta_entity);
                         _contexto.SaveChanges();
 
-                        var contaPFEntity = new RepositoryEntity.Models.ContaPessoaFisica();
+                        var contaPFEntity = new ContaPessoaFisica();
 
                         var contaEntity = _contexto.Conta.ToList().Where(c => c.Agencia == contaPFDomain.Agencia &&
                                                           c.NumeroConta == contaPFDomain.NumeroConta &&
@@ -107,7 +107,7 @@ namespace Services
             }
         }
 
-        public string AtualizarConta(Domain.ContaPessoaFisica contaPFDomain)
+        public string AtualizarConta(ContaPessoaFisicaDomain contaPFDomain)
         {
             try
             {
@@ -132,7 +132,7 @@ namespace Services
 
                     if (contaPFDomain.CPF != "string")
                     {
-                        var contaPFEntity = new RepositoryEntity.Models.ContaPessoaFisica();
+                        var contaPFEntity = new ContaPessoaFisica();
                         contaPFEntity.Cpf = contaPFDomain.CPF;
                         contaPFEntity.RendaFamiliar = contaPFDomain.RendaFamiliar;
                         contaPFEntity.Profissao = contaPFDomain.Profissao;
@@ -158,9 +158,9 @@ namespace Services
             }
         }
 
-        public RepositoryEntity.Models.ContaPessoaFisica? GetContaPessoaFisicaById(int idContaPF)
+        public ContaPessoaFisica? GetContaPessoaFisicaById(int idContaPF)
         {
-            var pessoaFisica = new RepositoryEntity.Models.ContaPessoaFisica();
+            var pessoaFisica = new ContaPessoaFisica();
 
             try
             {
@@ -206,21 +206,21 @@ namespace Services
             }
         }
 
-        public List<Domain.ContaPessoaFisica>? GetAllContasPessoasFisica()
+        public List<ContaPessoaFisicaDomain>? GetAllContasPessoasFisica()
         {
-            var lstContasPF_Entity = new List<RepositoryEntity.Models.ContaPessoaFisica>();
+            var lstContasPF_Entity = new List<ContaPessoaFisica>();
             try
             {
                 lstContasPF_Entity = _contexto.ContaPessoaFisicas.ToList();
 
                 if (lstContasPF_Entity != null)
                 {
-                    var listaContaPF_Domain = new List<Domain.ContaPessoaFisica>();
+                    var listaContaPF_Domain = new List<ContaPessoaFisicaDomain>();
 
                     foreach (var contaPF in lstContasPF_Entity)
                     {
                         listaContaPF_Domain.Add(
-                            new Domain.ContaPessoaFisica()
+                            new ContaPessoaFisicaDomain()
                             {
                                 CPF = contaPF?.Cpf ?? string.Empty
                                ,
@@ -247,7 +247,7 @@ namespace Services
             }
         }
 
-        public string InativarConta(Domain.ContaPessoaFisica contaPF)
+        public string InativarConta(ContaPessoaFisicaDomain contaPF)
         {
             try
             {
@@ -284,7 +284,7 @@ namespace Services
         }
 
 
-        public string CadastrarHistorico(Domain.ContaPessoaFisica contaPFDomain, ETipoTransacao tipoTransacao)
+        public string CadastrarHistorico(ContaPessoaFisicaDomain contaPFDomain, ETipoTransacao tipoTransacao)
         {
             try
             {

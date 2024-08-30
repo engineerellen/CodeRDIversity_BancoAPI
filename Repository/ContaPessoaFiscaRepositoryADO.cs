@@ -18,9 +18,9 @@ namespace Repository
             _configuration = configuration;
             connectionString = _configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
         }
-        public List<ContaPessoaFisica> RetornarContasPF()
+        public List<ContaPessoaFisicaDomain> RetornarContasPF()
         {
-            var listaContas = new List<ContaPessoaFisica>();
+            var listaContas = new List<ContaPessoaFisicaDomain>();
 
             try
             {
@@ -63,7 +63,7 @@ namespace Repository
                     //percorre o stream e adiciona os valores em objetos
                     while (contaPFDataReader.Read())
                     {
-                        ContaPessoaFisica conta = new ContaPessoaFisica();
+                        ContaPessoaFisicaDomain conta = new ContaPessoaFisicaDomain();
                         conta.IDConta = Convert.ToInt32(contaPFDataReader["ID_CONTA"]);
                         conta.Agencia = Convert.ToString(contaPFDataReader["Agencia"]) ?? string.Empty;
                         conta.NumeroConta = Convert.ToString(contaPFDataReader["NumeroConta"]) ?? string.Empty;
@@ -100,7 +100,7 @@ namespace Repository
             return listaContas;
         }
 
-        public int CadastrarContasPF(ContaPessoaFisica conta)
+        public int CadastrarContasPF(ContaPessoaFisicaDomain conta)
         {
             int retorno = 0;
             SqlTransaction? transacao = null;
@@ -163,7 +163,7 @@ namespace Repository
             }
         }
 
-        private int ConsultarConta(ContaPessoaFisica conta, SqlTransaction? transacao, SqlConnection conexao)
+        private int ConsultarConta(ContaPessoaFisicaDomain conta, SqlTransaction? transacao, SqlConnection conexao)
         {
             //consulta o id cadastrado
             SqlCommand cmdconsulta = new SqlCommand("SELECT MAX(ID_CONTA) ID_CONTA FROM CONTA WHERE Agencia = @Agencia AND NumeroConta = @NumeroConta AND Digito = @Digito AND ID_TIPO_CONTA = @ID_TIPO_CONTA", conexao);
@@ -185,7 +185,7 @@ namespace Repository
             return conta.IDConta;
         }
 
-        private void InserirConta(ContaPessoaFisica conta, SqlTransaction? transacao, SqlConnection conexao)
+        private void InserirConta(ContaPessoaFisicaDomain conta, SqlTransaction? transacao, SqlConnection conexao)
         {
             //insert da tabela conta
             var comandoSQLConta = new StringBuilder();
@@ -211,7 +211,7 @@ namespace Repository
             cmdConta.ExecuteNonQuery();
         }
 
-        public int AlterarContasPF(ContaPessoaFisica conta)
+        public int AlterarContasPF(ContaPessoaFisicaDomain conta)
         {
             int retorno = 0;
 
@@ -278,7 +278,7 @@ namespace Repository
             return retorno;
         }
 
-        public int InativarContasPF(ContaPessoaFisica conta)
+        public int InativarContasPF(ContaPessoaFisicaDomain conta)
         {
             int retorno = 0;
 

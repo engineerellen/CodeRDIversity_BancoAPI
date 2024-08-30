@@ -1,17 +1,17 @@
 ﻿using Domain;
 
 //objeto da classe conta com upcasting
-Conta objContaPF1 = new ContaPessoaFisica("Conta da Ellen", ETipoConta.Corrente) { ValorConta = 100 };
+Conta objContaPF1 = new ContaPessoaFisicaDomain("Conta da Ellen", ETipoConta.Corrente) { ValorConta = 100 };
 objContaPF1.VerSaldo();
 
 //instancia do objeto pessoa juridica
 //usar apenas a expressao new() para instanciar
-ContaPessoaJuridica objContaPJ1 = new ContaPessoaJuridica("Conta Corrente 1", ETipoConta.Corrente) { RazaoSocial = "Empresa dos meus sonhos!", Agencia = "0001", NumeroConta = "35698", Digito = "0" };
+ContaPessoaJuridicaDomain objContaPJ1 = new ContaPessoaJuridicaDomain("Conta Corrente 1", ETipoConta.Corrente) { RazaoSocial = "Empresa dos meus sonhos!", Agencia = "0001", NumeroConta = "35698", Digito = "0" };
 
 
 //downcasting
 Conta objPJ2 = objContaPJ1;
-ContaPessoaJuridica objContaPJ3 = (ContaPessoaJuridica)objPJ2;
+ContaPessoaJuridicaDomain objContaPJ3 = (ContaPessoaJuridicaDomain)objPJ2;
 
 objPJ2.Sacar(20000);
 
@@ -19,11 +19,11 @@ Console.WriteLine($"O valor de R${objPJ2.ValorConta} foi sacado da empresa: {obj
 
 
 //usando o "AS"
-Conta objConta = new ContaPessoaFisica("Cofrinho para viagem", ETipoConta.Investimento);
+Conta objConta = new ContaPessoaFisicaDomain("Cofrinho para viagem", ETipoConta.Investimento);
 
-if (objConta is ContaPessoaFisica)
+if (objConta is ContaPessoaFisicaDomain)
 {
-    ContaPessoaFisica? objPF = objConta as ContaPessoaFisica;
+    ContaPessoaFisicaDomain? objPF = objConta as ContaPessoaFisicaDomain;
 
     objPF.NomeCliente = "Ellen";
     objPF.Profissao = "Professora";

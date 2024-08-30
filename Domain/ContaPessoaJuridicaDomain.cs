@@ -2,7 +2,7 @@
 
 namespace Domain
 {
-    public class ContaPessoaJuridica : Conta
+    public class ContaPessoaJuridicaDomain : Conta
     {
         [Required]
         public string CNPJ { get; set; } = string.Empty;
@@ -17,11 +17,11 @@ namespace Domain
         public double FaturamentoMedio { get; set; }
 
 
-        public ContaPessoaJuridica()
+        public ContaPessoaJuridicaDomain()
         {
         }
 
-        public ContaPessoaJuridica(string nomeConta, ETipoConta tipoConta)
+        public ContaPessoaJuridicaDomain(string nomeConta, ETipoConta tipoConta)
         {
             TipoConta = tipoConta;
             NomeConta = nomeConta;
