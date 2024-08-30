@@ -1,5 +1,8 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Domain;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using RepositoryEntity;
+using RepositoryEntity.Context;
 using RepositoryEntity.Models;
 
 namespace Services
@@ -114,30 +117,32 @@ namespace Services
 
                     if (contaDbo is not null)
                     {
-                        contaDbo.Agencia = contaPFDomain.Agencia;
+                        contaDbo.Agencia = contaPFDomain.Agencia == "string"? contaDbo.Agencia: contaPFDomain.Agencia;
                         contaDbo.ValorConta = contaPFDomain.ValorConta;
-                        contaDbo.NomeConta = contaPFDomain.NomeConta;
-                        contaDbo.NumeroConta = contaPFDomain.NumeroConta;
+                        contaDbo.NomeConta = contaPFDomain.NomeConta == "string" ? contaDbo.NomeConta : contaPFDomain.NomeConta;
+                        contaDbo.NumeroConta = contaPFDomain.NumeroConta == "string" ? contaDbo.NumeroConta : contaPFDomain.NumeroConta;
                         contaDbo.Ativo = contaPFDomain.EstaAtiva;
-                        contaDbo.Digito = contaPFDomain.Digito;
+                        contaDbo.Digito = contaPFDomain.Digito == "string" ? contaDbo.Digito : contaPFDomain.Digito;
                         contaDbo.IdTipoConta = (int)contaPFDomain.TipoConta;
-                        contaDbo.Pix = contaPFDomain.Pix;
+                        contaDbo.Pix = contaPFDomain.Pix == "string" ? contaDbo.Pix : contaPFDomain.Pix;
 
                         _contexto.Update(contaDbo);
                         _contexto.SaveChanges();
                     }
 
-                    var contaPFEntity = new RepositoryEntity.Models.ContaPessoaFisica();
-                    contaPFEntity.Cpf = contaPFDomain.CPF;
-                    contaPFEntity.RendaFamiliar = contaPFDomain.RendaFamiliar;
-                    contaPFEntity.Profissao = contaPFDomain.Profissao;
-                    contaPFEntity.Endereco = contaPFDomain.Endereco;
-                    contaPFEntity.Genero = contaPFDomain?.Genero;
-                    contaPFEntity.NomeCliente = contaPFDomain?.NomeCliente ?? string.Empty;
+                    if (contaPFDomain.CPF != "string")
+                    {
+                        var contaPFEntity = new RepositoryEntity.Models.ContaPessoaFisica();
+                        contaPFEntity.Cpf = contaPFDomain.CPF;
+                        contaPFEntity.RendaFamiliar = contaPFDomain.RendaFamiliar;
+                        contaPFEntity.Profissao = contaPFDomain.Profissao;
+                        contaPFEntity.Endereco = contaPFDomain.Endereco;
+                        contaPFEntity.Genero = contaPFDomain?.Genero;
+                        contaPFEntity.NomeCliente = contaPFDomain?.NomeCliente ?? string.Empty;
 
-                    _contexto.Update(contaPFEntity);
-                    _contexto.SaveChanges();
-
+                        _contexto.Update(contaPFEntity);
+                        _contexto.SaveChanges();
+                    }
                     return "Conta Pessoa Física alterada com sucesso!";
                 }
                 else
@@ -277,5 +282,78 @@ namespace Services
                 return ex.Message;
             }
         }
+
+
+        public string CadastrarHistorico(Domain.ContaPessoaFisica contaPFDomain, ETipoTransacao tipoTransacao)
+        {
+            try
+            {
+                if (contaPFDomain != null)
+                {
+                    var contaExistente = GetContaById(contaPFDomain.IDConta);
+
+                    var objTpTransacao = _contexto.TipoTransacaos.Where(t=>t.Codigo == (int)tipoTransacao).FirstOrDefault();
+
+                    if (contaExistente != null)
+                    {
+                        var historico = new Historico()
+                        {
+                            DtTransacao = DateTime.Now
+                            ,
+                            IdConta = contaPFDomain.IDConta
+                            ,
+                            IdTipoTransacao = objTpTransacao != null ? objTpTransacao.IdTipoTransacao : (int)tipoTransacao
+                            ,
+                            Valor = contaPFDomain.ValorConta
+                        };
+
+                        _contexto.Add(historico);
+                        _contexto.SaveChanges();
+
+
+                        return "Transação cadastrada com sucesso!";
+                    }
+                    else
+                    {
+                        return "Conta inexistente!";
+                    }
+                }
+                else
+                    return "Conta inválida!";
+            }
+            catch (SqlException)
+            {
+                return "Não foi possível se comunicar com a base de dados!";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        public List<Historico>? VerificarExtrato(int idConta, int mesReferencia)
+        {
+            try
+            {
+                if (idConta > 0)
+                {
+                    var contaExistente = GetContaById(idConta);
+
+                    return _contexto.Historicos.Where(h => h.IdConta == idConta && h.DtTransacao.Month == mesReferencia && h.DtTransacao.Year == DateTime.Now.Year).ToList();
+                }
+
+                else
+                    return null;
+            }
+            catch (SqlException)
+            {
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
     }
 }

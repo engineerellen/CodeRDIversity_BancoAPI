@@ -1,7 +1,8 @@
 ﻿using BancoAPI.DTO;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
-using RepositoryEntity.Models;
+using RepositoryEntity;
+using RepositoryEntity.Context;
 using Services;
 
 namespace BancoAPI.Controllers
@@ -35,18 +36,18 @@ namespace BancoAPI.Controllers
             }
         }
 
-        //[HttpGet("{data}")]
-        //public ActionResult<IEnumerable<Conta>> Get(DateTime data)
-        //{
-        //    try
-        //    {
-        //        return conta.VerExtrato(data);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+        [HttpGet("VerificarExtrato")]
+        public ActionResult<List<Historico>>? VerificarExtrato(int idConta, int mesReferencia)
+        {
+            try
+            {
+                return _service.VerificarExtrato(idConta, mesReferencia)?? new List<Historico>();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpPost]
         public IActionResult Post([FromBody] Domain.ContaPessoaFisica contaPessoaFisica)
@@ -62,26 +63,59 @@ namespace BancoAPI.Controllers
             }
         }
 
-        //[HttpPost("Transferir")]
-        //public IActionResult Transferir([FromBody] ContaPara contaPara)
-        //{
-        //    try
-        //    {
-        //        if (contaPara.TipoContaPFPJ != "PF")
-        //            return BadRequest("Conta precisa ser pessoa física!");
+        [HttpPost("Transferir")]
+        public IActionResult Transferir([FromBody] ContaPara contaPara)
+        {
+            try
+            {
+                if (contaPara.TipoContaPFPJ != "PF")
+                    return BadRequest("Conta precisa ser pessoa física!");
 
-        //        Conta ctaPara = new Domain.ContaPessoaFisica();
-        //        ctaPara.Pix = contaPara.Pix;
-        //        ctaPara.ValorConta = conta.ValorConta;
+                var ctaPF = contaPara.TransferirConta(contaPara);
+                _service.AtualizarConta(ctaPF);
+                _service.CadastrarHistorico(ctaPF, ETipoTransacao.Transferencia);
 
-        //        conta.Transferir(ctaPara);
-        //        return Ok("Transferido com sucesso!");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+                return Ok("Transferido com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("Sacar")]
+        public IActionResult Sacar(decimal valorSaque, [FromBody] Domain.ContaPessoaFisica contaPessoaFisica)
+        {
+            try
+            {
+                contaPessoaFisica.Sacar(valorSaque);
+                _service.AtualizarConta(contaPessoaFisica);
+                _service.CadastrarHistorico(contaPessoaFisica, ETipoTransacao.Saque);
+
+                return Ok("Saque feito com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("Depositar")]
+        public IActionResult Depositar(decimal valorDeposito, [FromBody] Domain.ContaPessoaFisica contaPessoaFisica)
+        {
+            try
+            {
+                contaPessoaFisica.Depositar(valorDeposito);
+                _service.AtualizarConta(contaPessoaFisica);
+                _service.CadastrarHistorico(contaPessoaFisica, ETipoTransacao.Deposito);
+
+                return Ok("Depósito feito com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpPut("{idContaPF}")]
         public IActionResult Put(int idConta, int idContaPF, string nomeConta)

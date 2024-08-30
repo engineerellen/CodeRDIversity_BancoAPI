@@ -29,6 +29,6 @@ if (objConta is ContaPessoaFisica)
     objPF.Profissao = "Professora";
     objPF.ValorConta = (decimal)20000000.45;
 
-    objPF.Depositar(100000);
+    objPF?.Depositar(100000);
     Console.WriteLine($"O valor de R${objPF.ValorConta} foi depositado no Investimento da {objPF.NomeCliente}");
 }

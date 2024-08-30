@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using RepositoryEntity.Models;
 
-namespace RepositoryEntity.Models;
+namespace RepositoryEntity.Context;
 
 public partial class BancoContext : DbContext
 {
@@ -24,6 +25,10 @@ public partial class BancoContext : DbContext
     public virtual DbSet<Contum> Conta { get; set; }
 
     public virtual DbSet<TipoContum> TipoConta { get; set; }
+
+    public virtual DbSet<Historico> Historicos { get; set; }
+
+    public virtual DbSet<TipoTransacao> TipoTransacaos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -140,6 +145,44 @@ public partial class BancoContext : DbContext
                 .HasMaxLength(200)
                 .IsUnicode(false)
                 .HasColumnName("DESCRICAO_TIPO");
+        });
+
+        modelBuilder.Entity<Historico>(entity =>
+        {
+            entity.HasKey(e => e.IdHistorico)
+              .HasName("PK_HISTORICO")
+                .IsClustered(true);
+
+            entity.ToTable("HISTORICO");
+
+            entity.Property(e => e.IdHistorico).HasColumnName("ID_HISTORICO");
+            entity.Property(e => e.DtTransacao)
+                .HasColumnType("datetime")
+                .HasColumnName("DT_Transacao");
+            entity.Property(e => e.IdConta).HasColumnName("ID_CONTA");
+            entity.Property(e => e.IdTipoTransacao).HasColumnName("ID_TipoTransacao");
+            entity.Property(e => e.Valor)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("VALOR");
+
+            entity.HasOne(d => d.IdTipoTransacaoNavigation).WithMany(p => p.Historicos)
+               .HasForeignKey(d => d.IdTipoTransacao)
+               .OnDelete(DeleteBehavior.ClientSetNull)
+               .HasConstraintName("FK_HISTORICO_TipoTransacao");
+        });
+
+
+        modelBuilder.Entity<TipoTransacao>(entity =>
+        {
+            entity.HasKey(e => e.IdTipoTransacao);
+
+            entity.ToTable("TipoTransacao");
+
+            entity.Property(e => e.IdTipoTransacao).HasColumnName("ID_TipoTransacao");
+            entity.Property(e => e.Codigo).HasColumnName("CODIGO");
+            entity.Property(e => e.Descricao)
+                .HasMaxLength(200)
+                .IsUnicode(false);
         });
 
         OnModelCreatingPartial(modelBuilder);
