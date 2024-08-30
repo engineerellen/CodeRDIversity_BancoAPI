@@ -27,7 +27,7 @@ namespace BancoAPI.Controllers
         {
             try
             {
-                return _service.GetAllContasPessoasFisica()??new List<ContaPessoaFisicaDomain>();
+                return _service.GetAllContasPessoasFisica() ?? new List<ContaPessoaFisicaDomain>();
             }
             catch (Exception ex)
             {
@@ -40,7 +40,7 @@ namespace BancoAPI.Controllers
         {
             try
             {
-                return _service.VerificarExtrato(idConta, mesReferencia)?? new List<Historico>();
+                return _service.VerificarExtrato(idConta, mesReferencia) ?? new List<Historico>();
             }
             catch (Exception ex)
             {
@@ -101,7 +101,7 @@ namespace BancoAPI.Controllers
         {
             try
             {
-                Domain.ContaPessoaFisicaDomain contaPF = new() { IDConta = idConta, ID_ContaPF = idContaPF };
+                ContaPessoaFisicaDomain contaPF = new() { IDConta = idConta, ID_ContaPF = idContaPF };
                 contaPF.SetarNome(nomeConta);
 
                 _service.AtualizarConta(contaPF);
@@ -120,7 +120,7 @@ namespace BancoAPI.Controllers
         {
             try
             {
-                Domain.ContaPessoaFisicaDomain contaPF = new() { IDConta = idConta, ID_ContaPF = idContaPF };
+                ContaPessoaFisicaDomain contaPF = new() { IDConta = idConta, ID_ContaPF = idContaPF };
 
                 _service.InativarConta(contaPF);
                 return Ok("Conta encerrada com sucesso!");
