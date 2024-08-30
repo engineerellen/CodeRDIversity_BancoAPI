@@ -1,7 +1,8 @@
 ﻿using BancoAPI.DTO;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
-using Repository;
+using RepositoryEntity.Models;
+using Services;
 
 namespace BancoAPI.Controllers
 {
@@ -9,58 +10,50 @@ namespace BancoAPI.Controllers
     [ApiController]
     public class ContaPessoaFisicaController : ControllerBase
     {
-        Conta conta;
-
+        BancoContext _contexto;
         IConfiguration _configuration;
-        ContaPessoaFiscaRepositoryADO _repositoryADO;
+        ContaPessoaFisicaService _service;
 
-        public ContaPessoaFisicaController(IConfiguration configuration)
+        public ContaPessoaFisicaController(IConfiguration configuration
+                                           , BancoContext contexto)
         {
             _configuration = configuration;
-            _repositoryADO = new ContaPessoaFiscaRepositoryADO(_configuration);
-
-            conta = new ContaPessoaFisica("Aposentadoria", ETipoConta.Investimento);
-            conta.Agencia = "0001";
-            conta.ID = 1;
-            conta.Digito = "1";
-            conta.NumeroConta = " 2345678";
-            conta.Pix = "(11)99999-9999";
-            conta.ValorConta = 1000000;
+            _contexto = contexto;
+            _service = new ContaPessoaFisicaService(_contexto, _configuration);
         }
 
         [HttpGet]
-        public ActionResult<List<ContaPessoaFisica>> Get()
+        public ActionResult<List<Domain.ContaPessoaFisica>> Get()
         {
             try
             {
-                return _repositoryADO.RetornarContasPF();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-
-        }
-
-        [HttpGet("{data}")]
-        public ActionResult<IEnumerable<Conta>> Get(DateTime data)
-        {
-            try
-            {
-                return conta.VerExtrato(data);
+                return _service.GetAllContasPessoasFisica()??new List<Domain.ContaPessoaFisica>();
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
+        //[HttpGet("{data}")]
+        //public ActionResult<IEnumerable<Conta>> Get(DateTime data)
+        //{
+        //    try
+        //    {
+        //        return conta.VerExtrato(data);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
         [HttpPost]
-        public IActionResult Post([FromBody] ContaPessoaFisica contaPessoaFisica)
+        public IActionResult Post([FromBody] Domain.ContaPessoaFisica contaPessoaFisica)
         {
             try
             {
-                _repositoryADO.CadastrarContasPF(contaPessoaFisica);
+                _service.CadastrarContaPesoaFisica(contaPessoaFisica);
                 return Ok("Conta cadastrada com sucesso!");
             }
             catch (Exception ex)
@@ -69,33 +62,37 @@ namespace BancoAPI.Controllers
             }
         }
 
-        [HttpPost("Transferir")]
-        public IActionResult Transferir([FromBody] ContaPara contaPara)
+        //[HttpPost("Transferir")]
+        //public IActionResult Transferir([FromBody] ContaPara contaPara)
+        //{
+        //    try
+        //    {
+        //        if (contaPara.TipoContaPFPJ != "PF")
+        //            return BadRequest("Conta precisa ser pessoa física!");
+
+        //        Conta ctaPara = new Domain.ContaPessoaFisica();
+        //        ctaPara.Pix = contaPara.Pix;
+        //        ctaPara.ValorConta = conta.ValorConta;
+
+        //        conta.Transferir(ctaPara);
+        //        return Ok("Transferido com sucesso!");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        [HttpPut("{idContaPF}")]
+        public IActionResult Put(int idConta, int idContaPF, string nomeConta)
         {
             try
             {
-                if (contaPara.TipoContaPFPJ != "PF")
-                    return BadRequest("Conta precisa ser pessoa física!");
+                Domain.ContaPessoaFisica contaPF = new() { IDConta = idConta, ID_ContaPF = idContaPF };
+                contaPF.SetarNome(nomeConta);
 
-                Conta ctaPara = new ContaPessoaFisica();
-                ctaPara.Pix = contaPara.Pix;
-                ctaPara.ValorConta = conta.ValorConta;
+                _service.AtualizarConta(contaPF);
 
-                conta.Transferir(ctaPara);
-                return Ok("Transferido com sucesso!");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPut("{id}")]
-        public IActionResult Put(string value)
-        {
-            try
-            {
-                conta.SetarNome(value);
                 return Ok("Nome Setado com sucesso!");
 
             }
@@ -103,22 +100,22 @@ namespace BancoAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-
         }
 
-        [HttpDelete("{codigoConta}")]
-        public IActionResult Delete([FromBody] ContaPessoaFisica contaPessoaFisica)
+        [HttpDelete("{idContaPF}")]
+        public IActionResult InativarConta(int idConta, int idContaPF)
         {
             try
             {
-                _repositoryADO.InativarContasPF(contaPessoaFisica);
+                Domain.ContaPessoaFisica contaPF = new() { IDConta = idConta, ID_ContaPF = idContaPF };
+
+                _service.InativarConta(contaPF);
                 return Ok("Conta encerrada com sucesso!");
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-
         }
     }
 }

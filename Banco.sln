@@ -9,7 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MostraConta", "MostraConta\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BancoAPI", "BancoAPI\BancoAPI.csproj", "{52792BF7-A955-4C34-932A-09F3A6BB6A32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryADO", "Repository\RepositoryADO.csproj", "{92586CF8-2770-4BCA-B0E5-2FD8F74D79A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepositoryADO", "Repository\RepositoryADO.csproj", "{92586CF8-2770-4BCA-B0E5-2FD8F74D79A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryEntity", "RepositoryEntity\RepositoryEntity.csproj", "{BB029E65-648C-4C87-9A75-A42687AB7799}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{5D7FA6B8-BEE6-4839-BCFD-41BEC87D7D93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{92586CF8-2770-4BCA-B0E5-2FD8F74D79A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92586CF8-2770-4BCA-B0E5-2FD8F74D79A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92586CF8-2770-4BCA-B0E5-2FD8F74D79A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB029E65-648C-4C87-9A75-A42687AB7799}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB029E65-648C-4C87-9A75-A42687AB7799}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB029E65-648C-4C87-9A75-A42687AB7799}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB029E65-648C-4C87-9A75-A42687AB7799}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D7FA6B8-BEE6-4839-BCFD-41BEC87D7D93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D7FA6B8-BEE6-4839-BCFD-41BEC87D7D93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D7FA6B8-BEE6-4839-BCFD-41BEC87D7D93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D7FA6B8-BEE6-4839-BCFD-41BEC87D7D93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,9 +4,9 @@ namespace Domain
 {
     public abstract class Conta : IConta
     {
-        private double _valorConta = 0;
+        private decimal _valorConta = 0;
 
-        public int ID { get; set; }
+        public int IDConta { get; set; }
 
         [Required]
         public string Agencia { get; set; } = "0001";
@@ -21,7 +21,7 @@ namespace Domain
         public bool EstaAtiva { get; set; } = true;
 
         [Required]
-        public double ValorConta
+        public decimal ValorConta
         {
             get => _valorConta;
             set
@@ -41,7 +41,7 @@ namespace Domain
 
         public string DescricaoTipoConta { get; set; } = string.Empty;
 
-        public virtual void Sacar(double valor)
+        public virtual void Sacar(decimal valor)
         {
             if (_valorConta > 0 && valor <= _valorConta)
                 _valorConta -= valor;
@@ -51,12 +51,12 @@ namespace Domain
                 throw new Exception("Valor de saque inválido!");
         }
 
-        public virtual void Depositar(double valor) =>
+        public virtual void Depositar(decimal valor) =>
             _valorConta += valor;
         // ou fazer desta forma:
         // _valorConta = _valorConta + valor;
 
-        public virtual double VerSaldo() => _valorConta;
+        public virtual decimal VerSaldo() => _valorConta;
 
 
         public virtual void SetarNome(string nome) =>
@@ -75,12 +75,11 @@ namespace Domain
             _valorConta -= contaPara.ValorConta;
         }
 
-        public void EncerrarConta(int codigoConta)
+        public void EncerrarConta()
         {
             if (ValorConta < 0)
                 throw new Exception("Não é possivel encerrar a conta, Verifique seu saldo!");
 
-            ID = codigoConta;
             EstaAtiva = false;
         }
     }

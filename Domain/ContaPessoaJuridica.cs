@@ -27,12 +27,12 @@ namespace Domain
             NomeConta = nomeConta;
         }
 
-        public override void Sacar(double value) => base.Sacar(value);
+        public override void Sacar(decimal value) => base.Sacar(value);
 
 
-        public override void Depositar(double value) => base.Depositar(value);
+        public override void Depositar(decimal value) => base.Depositar(value);
 
-        public override double VerSaldo() => base.VerSaldo();//é o mesmo que
+        public override decimal VerSaldo() => base.VerSaldo();//é o mesmo que
         //public override double VerSaldo()
         //{
         //    base.VerSaldo();

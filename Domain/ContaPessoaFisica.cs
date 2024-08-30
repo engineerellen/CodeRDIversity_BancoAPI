@@ -11,7 +11,7 @@ namespace Domain
     public class ContaPessoaFisica : Conta
     {
         [Required]
-        public int ID_PF { get; set; }
+        public int ID_ContaPF { get; set; }
 
         [Required]
         public string NomeCliente { get; set; } = string.Empty;
@@ -25,7 +25,7 @@ namespace Domain
         public string Endereco { get; set; } = string.Empty;
         public string Profissao { get; set; } = string.Empty;
 
-        public double RendaFamiliar { get; set; }
+        public decimal RendaFamiliar { get; set; }
 
 
         //construtor da classe ContaPF
@@ -39,12 +39,12 @@ namespace Domain
             this.TipoConta = tipoConta;
         }
 
-        public override void Sacar(double value) => base.Sacar(value);
+        public override void Sacar(decimal value) => base.Sacar(value);
 
 
-        public override void Depositar(double value) => base.Depositar(value);
+        public override void Depositar(decimal value) => base.Depositar(value);
 
-        public override double VerSaldo() =>
+        public override decimal VerSaldo() =>
             base.VerSaldo();
 
 

@@ -64,20 +64,20 @@ namespace Repository
                     while (contaPFDataReader.Read())
                     {
                         ContaPessoaFisica conta = new ContaPessoaFisica();
-                        conta.ID = Convert.ToInt32(contaPFDataReader["ID_CONTA"]);
+                        conta.IDConta = Convert.ToInt32(contaPFDataReader["ID_CONTA"]);
                         conta.Agencia = Convert.ToString(contaPFDataReader["Agencia"]) ?? string.Empty;
                         conta.NumeroConta = Convert.ToString(contaPFDataReader["NumeroConta"]) ?? string.Empty;
                         conta.Digito = Convert.ToString(contaPFDataReader["Digito"]) ?? string.Empty;
                         conta.Pix = Convert.ToString(contaPFDataReader["PIX"]) ?? string.Empty;
                         conta.EstaAtiva = Convert.ToBoolean(contaPFDataReader["Ativo"]);
-                        conta.ValorConta = Convert.ToDouble(contaPFDataReader["ValorConta"]);
+                        conta.ValorConta = Convert.ToDecimal(contaPFDataReader["ValorConta"]);
                         conta.NomeConta = Convert.ToString(contaPFDataReader["NomeConta"]) ?? string.Empty;
                         conta.CPF = Convert.ToString(contaPFDataReader["CPF"]) ?? string.Empty;
                         conta.NomeCliente = Convert.ToString(contaPFDataReader["NomeCliente"]) ?? string.Empty;
                         conta.Genero = Convert.ToString(contaPFDataReader["Genero"]) ?? string.Empty;
                         conta.Endereco = Convert.ToString(contaPFDataReader["Endereco"]) ?? string.Empty;
                         conta.Profissao = Convert.ToString(contaPFDataReader["Profissao"]) ?? string.Empty;
-                        conta.RendaFamiliar = Convert.ToDouble(contaPFDataReader["RendaFamiliar"]);
+                        conta.RendaFamiliar = Convert.ToDecimal(contaPFDataReader["RendaFamiliar"]);
                         conta.TipoConta = (ETipoConta)Convert.ToInt32(contaPFDataReader["CODIGO"]);
                         conta.DescricaoTipoConta = Convert.ToString(contaPFDataReader["DESCRICAO_TIPO"]) ?? string.Empty;
 
@@ -99,7 +99,6 @@ namespace Repository
 
             return listaContas;
         }
-
 
         public int CadastrarContasPF(ContaPessoaFisica conta)
         {
@@ -137,10 +136,10 @@ namespace Repository
                     InserirConta(conta, transacao, conexao);
 
                     //obtem o id da conta cadastrado na inserção acima
-                    conta.ID = ConsultarConta(conta, transacao, conexao);
+                    conta.IDConta = ConsultarConta(conta, transacao, conexao);
 
                     //adiciona o id da conta como parametro
-                    cmdContaPF.Parameters.AddWithValue("@ID_CONTA", conta.ID);
+                    cmdContaPF.Parameters.AddWithValue("@ID_CONTA", conta.IDConta);
 
                     cmdContaPF.Transaction = transacao;
                     retorno = cmdContaPF.ExecuteNonQuery();
@@ -179,11 +178,11 @@ namespace Repository
             SqlDataReader contaPFDataReader = cmdconsulta.ExecuteReader();
 
             while (contaPFDataReader.Read())
-                conta.ID = Convert.ToInt32(contaPFDataReader["ID_CONTA"]);
+                conta.IDConta = Convert.ToInt32(contaPFDataReader["ID_CONTA"]);
 
             contaPFDataReader.Close();
 
-            return conta.ID;
+            return conta.IDConta;
         }
 
         private void InserirConta(ContaPessoaFisica conta, SqlTransaction? transacao, SqlConnection conexao)
@@ -252,7 +251,7 @@ namespace Repository
                 cmd.Parameters.AddWithValue("@Ativo", conta.EstaAtiva);
                 cmd.Parameters.AddWithValue("@ValorConta", conta.ValorConta);
                 cmd.Parameters.AddWithValue("@NomeConta", conta.NomeConta);
-                cmd.Parameters.AddWithValue("@ID_CONTA", conta.ID);
+                cmd.Parameters.AddWithValue("@ID_CONTA", conta.IDConta);
 
                 cmd.Parameters.AddWithValue("@CPF", conta.CPF);
                 cmd.Parameters.AddWithValue("@NomeCliente", conta.NomeCliente);
@@ -260,7 +259,7 @@ namespace Repository
                 cmd.Parameters.AddWithValue("@Endereco", conta.Endereco);
                 cmd.Parameters.AddWithValue("@Profissao", conta.Profissao);
                 cmd.Parameters.AddWithValue("@RendaFamiliar", conta.RendaFamiliar);
-                cmd.Parameters.AddWithValue("@ID_CONTA_PF", conta.ID_PF);
+                cmd.Parameters.AddWithValue("@ID_CONTA_PF", conta.ID_ContaPF);
 
                 try
                 {
@@ -294,7 +293,7 @@ namespace Repository
                 SqlCommand cmd = new SqlCommand(comandoSQL.ToString(), conexao);
                 cmd.CommandType = CommandType.Text;
 
-                cmd.Parameters.AddWithValue("@ID_CONTA", conta.ID);
+                cmd.Parameters.AddWithValue("@ID_CONTA", conta.IDConta);
                 cmd.Parameters.AddWithValue("@ATIVO", conta.EstaAtiva);
 
                 try

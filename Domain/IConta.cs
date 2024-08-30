@@ -7,17 +7,17 @@
         string NumeroConta { get; set; }
         string Digito { get; set; }
         string? Pix { get; set; }
-        double ValorConta { get; set; }
+        decimal ValorConta { get; set; }
         ETipoConta TipoConta { get; set; }
         string NomeConta { get; set; }
 
         //métodos
-        void Sacar(double valor);
-        void Depositar(double valor);
-        double VerSaldo();
+        void Sacar(decimal valor);
+        void Depositar(decimal valor);
+        decimal VerSaldo();
         void SetarNome(string nome);
         void Transferir(Conta conta);
 
-        void EncerrarConta(int codigoConta);
+        void EncerrarConta();
     }
 }
