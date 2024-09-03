@@ -34,9 +34,7 @@ namespace Services
                             && contaExistente.NumeroConta == contaPFDomain.NumeroConta
                             && contaExistente.Digito == contaPFDomain.Digito
                             && contaExistente.IdTipoConta == (int)contaPFDomain.TipoConta)
-                        {
-                            return "Conta existente no sistema!";
-                        }
+                             return "Conta existente no sistema!";
                     }
 
                     if (contaExistente == null)
@@ -57,7 +55,7 @@ namespace Services
                         ,
                             Pix = contaPFDomain.Pix
                         ,
-                            ValorConta = (decimal)contaPFDomain.ValorConta
+                            ValorConta = contaPFDomain.ValorConta
                         };
 
                         _contexto.Add(conta_entity);
@@ -65,7 +63,7 @@ namespace Services
 
                         var contaPFEntity = new ContaPessoaFisica();
 
-                        var contaEntity = _contexto.Conta.ToList().Where(c => c.Agencia == contaPFDomain.Agencia &&
+                        var contaEntity = _contexto.Conta.Where(c => c.Agencia == contaPFDomain.Agencia &&
                                                           c.NumeroConta == contaPFDomain.NumeroConta &&
                                                           c.Digito == contaPFDomain.Digito
                                                           && c.IdTipoConta == (int)contaPFDomain.TipoConta).LastOrDefault();
@@ -86,9 +84,7 @@ namespace Services
                         return "Conta Pessoa Física cadastrada com sucesso!";
                     }
                     else
-                    {
                         return "Conta já existente!";
-                    }
                 }
                 else
                     return "Conta inválida!";
@@ -117,7 +113,7 @@ namespace Services
 
                     if (contaDbo is not null)
                     {
-                        contaDbo.Agencia = contaPFDomain.Agencia == "string"? contaDbo.Agencia: contaPFDomain.Agencia;
+                        contaDbo.Agencia = contaPFDomain.Agencia == "string" ? contaDbo.Agencia : contaPFDomain.Agencia;
                         contaDbo.ValorConta = contaPFDomain.ValorConta;
                         contaDbo.NomeConta = contaPFDomain.NomeConta == "string" ? contaDbo.NomeConta : contaPFDomain.NomeConta;
                         contaDbo.NumeroConta = contaPFDomain.NumeroConta == "string" ? contaDbo.NumeroConta : contaPFDomain.NumeroConta;
@@ -168,7 +164,7 @@ namespace Services
                     return null;
 
                 var pf = _contexto.ContaPessoaFisicas.Where(x => x.IdContaPf == idContaPF).ToList();
-                pessoaFisica = pf.FirstOrDefault();
+                pessoaFisica = pf?.SingleOrDefault();
 
                 if (pessoaFisica != null)
                     return pessoaFisica;
@@ -192,7 +188,7 @@ namespace Services
                     return null;
 
                 var cta = _contexto.Conta.Where(x => x.IdConta == idConta).ToList();
-                conta = cta?.FirstOrDefault();
+                conta = cta?.SingleOrDefault();
 
                 if (conta != null)
                     return conta;
@@ -292,7 +288,7 @@ namespace Services
                 {
                     var contaExistente = GetContaById(contaPFDomain.IDConta);
 
-                    var objTpTransacao = _contexto.TipoTransacaos.Where(t=>t.Codigo == (int)tipoTransacao).FirstOrDefault();
+                    var objTpTransacao = _contexto.TipoTransacaos.Where(t => t.Codigo == (int)tipoTransacao).FirstOrDefault();
 
                     if (contaExistente != null)
                     {
@@ -339,7 +335,9 @@ namespace Services
                 {
                     var contaExistente = GetContaById(idConta);
 
-                    return _contexto.Historicos.Where(h => h.IdConta == idConta && h.DtTransacao.Month == mesReferencia && h.DtTransacao.Year == DateTime.Now.Year).ToList();
+                    return _contexto.Historicos.Where(h => h.IdConta == idConta
+                                                   && h.DtTransacao.Month == mesReferencia
+                                                   && h.DtTransacao.Year == DateTime.Now.Year).ToList();
                 }
 
                 else
