@@ -1,5 +1,34 @@
 ﻿using Domain;
 
+//Exemplo de Abstract Factory
+Console.WriteLine("Insira se você é F para Pessoa Fisica ou J para Pessoa Jurídica");
+
+string valor = Console.ReadLine();
+Conta objConta = null;
+
+switch (valor)
+{
+    case "F":
+        objConta = new ContaPessoaFisicaDomain();
+        break;
+
+    case "J":
+        objConta = new ContaPessoaJuridicaDomain();
+        break;
+
+    default:
+        Console.WriteLine("Conta Inválida!");
+        break;
+}
+
+objConta?.SetarNome($"Nome Conta {valor}");
+objConta?.Depositar(100);
+
+if (objConta is not null)
+    Console.WriteLine($"O saldo da conta é {objConta?.VerSaldo()}");
+//Fim do Exemplo de Abstract Factory
+
+
 //objeto da classe conta com upcasting
 Conta objContaPF1 = new ContaPessoaFisicaDomain("Conta da Ellen", ETipoConta.Corrente) { ValorConta = 100 };
 objContaPF1.VerSaldo();
@@ -19,11 +48,11 @@ Console.WriteLine($"O valor de R${objPJ2.ValorConta} foi sacado da empresa: {obj
 
 
 //usando o "AS"
-Conta objConta = new ContaPessoaFisicaDomain("Cofrinho para viagem", ETipoConta.Investimento);
+Conta objConta1 = new ContaPessoaFisicaDomain("Cofrinho para viagem", ETipoConta.Investimento);
 
-if (objConta is ContaPessoaFisicaDomain)
+if (objConta1 is ContaPessoaFisicaDomain)
 {
-    ContaPessoaFisicaDomain? objPF = objConta as ContaPessoaFisicaDomain;
+    ContaPessoaFisicaDomain? objPF = objConta1 as ContaPessoaFisicaDomain;
 
     objPF.NomeCliente = "Ellen";
     objPF.Profissao = "Professora";
