@@ -4,6 +4,8 @@ namespace Domain
 {
     public abstract class Conta : IConta
     {
+        protected decimal juros = (decimal)0.12;
+
         private decimal _valorConta = 0;
 
         public int IDConta { get; set; }

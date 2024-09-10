@@ -27,6 +27,8 @@ namespace Domain
 
         public decimal RendaFamiliar { get; set; }
 
+        public bool Emprestimo { get; set; }
+
 
         //construtor da classe ContaPF
         public ContaPessoaFisicaDomain()
@@ -39,14 +41,26 @@ namespace Domain
             this.TipoConta = tipoConta;
         }
 
-        public override void Sacar(decimal value) => base.Sacar(value);
+        public override void Sacar(decimal value)
+        {
+            if (Emprestimo)
+                ValorConta = ValorConta - value - (ValorConta * juros);
+            else
+                base.Sacar(value);
+        }
 
+        public override void Depositar(decimal value)
+        {
+            //if(DevendoPensao())
+            //    Transferir()
+            //        else
 
-        public override void Depositar(decimal value) => base.Depositar(value);
+            base.Depositar(value);
+        }
+
 
         public override decimal VerSaldo() =>
             base.VerSaldo();
-
 
         public override sealed void SetarNome(string nome) => base.SetarNome(nome);
 
