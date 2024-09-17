@@ -2,7 +2,7 @@
 
 namespace Domain
 {
-    public abstract class Conta : IConta
+    public class Conta : IConta
     {
         protected decimal juros = (decimal)0.12;
 

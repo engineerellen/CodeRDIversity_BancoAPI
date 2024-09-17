@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BancoAPI", "BancoAPI\BancoA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepositoryADO", "Repository\RepositoryADO.csproj", "{92586CF8-2770-4BCA-B0E5-2FD8F74D79A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryEntity", "RepositoryEntity\RepositoryEntity.csproj", "{BB029E65-648C-4C87-9A75-A42687AB7799}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepositoryEntity", "RepositoryEntity\RepositoryEntity.csproj", "{BB029E65-648C-4C87-9A75-A42687AB7799}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{5D7FA6B8-BEE6-4839-BCFD-41BEC87D7D93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{5D7FA6B8-BEE6-4839-BCFD-41BEC87D7D93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BancoTeste", "BancoTeste\BancoTeste.csproj", "{F51A876C-6C5B-419F-9087-BD4DABDB899D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{5D7FA6B8-BEE6-4839-BCFD-41BEC87D7D93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D7FA6B8-BEE6-4839-BCFD-41BEC87D7D93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D7FA6B8-BEE6-4839-BCFD-41BEC87D7D93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F51A876C-6C5B-419F-9087-BD4DABDB899D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F51A876C-6C5B-419F-9087-BD4DABDB899D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F51A876C-6C5B-419F-9087-BD4DABDB899D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F51A876C-6C5B-419F-9087-BD4DABDB899D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
