@@ -4,7 +4,7 @@ namespace Domain
 {
     public class Conta : IConta
     {
-        protected decimal juros = (decimal)0.12;
+        public decimal juros = (decimal)0.12;
 
         private decimal _valorConta = 0;
 
@@ -28,7 +28,7 @@ namespace Domain
             get => _valorConta;
             set
             {
-                if (_valorConta >= 0)
+                if (value >= 0)
                     _valorConta = value;
 
                 else
@@ -43,20 +43,27 @@ namespace Domain
 
         public string DescricaoTipoConta { get; set; } = string.Empty;
 
-        public virtual void Sacar(decimal valor)
+        public virtual void Sacar(decimal valorSaque)
         {
-            if (_valorConta > 0 && valor <= _valorConta)
-                _valorConta -= valor;
+            if (_valorConta > 0 && valorSaque <= _valorConta)
+                _valorConta -= valorSaque;
             // ou fazer desta forma:
-            // _valorConta = _valorConta - valor;
+            // _valorConta = _valorConta - valorSaque;
             else
                 throw new Exception("Valor de saque inválido!");
         }
 
-        public virtual void Depositar(decimal valor) =>
-            _valorConta += valor;
-        // ou fazer desta forma:
-        // _valorConta = _valorConta + valor;
+        public virtual void Depositar(decimal valorADepositar)
+        {
+            if (valorADepositar >= 0)
+                _valorConta += valorADepositar;
+            // ou fazer desta forma:
+            // _valorConta = _valorConta + valorSaque;
+
+            else
+                throw new Exception("valor para depósito não pode ser negativo!");
+        }
+
 
         public virtual decimal VerSaldo() => _valorConta;
 
@@ -64,15 +71,19 @@ namespace Domain
         public virtual void SetarNome(string nome) =>
             NomeConta = nome;
 
-        public virtual List<Conta> VerExtrato(DateTime data)
-        {
-            var lstConta = new List<Conta>();
-            lstConta.Add(this);
-            return lstConta;
-        }
-
         public virtual void Transferir(Conta contaPara)
         {
+            if (contaPara is null)
+                throw new Exception("Favor, informar conta destino!");
+
+            if (contaPara.ValorConta <= 0)
+                throw new Exception("Favor, informar um valor válido para transferência!");
+
+            if (string.IsNullOrEmpty(contaPara.Agencia) ||
+                string.IsNullOrEmpty(contaPara.NumeroConta) ||
+                string.IsNullOrEmpty(contaPara.Pix))
+                throw new Exception("favor, informar dados para transferência!");
+
             contaPara.ValorConta += contaPara.ValorConta;
             _valorConta -= contaPara.ValorConta;
         }
