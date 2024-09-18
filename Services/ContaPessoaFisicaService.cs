@@ -22,7 +22,7 @@ namespace Services
         {
             try
             {
-                _contexto.Database.BeginTransaction();
+                _contexto.Database?.BeginTransaction();
 
                 if (contaPFDomain != null)
                 {
@@ -79,7 +79,7 @@ namespace Services
                         _contexto.Add(contaPFEntity);
                         _contexto.SaveChanges();
 
-                        _contexto.Database.CommitTransaction();
+                        _contexto.Database?.CommitTransaction();
 
                         return "Conta Pessoa Física cadastrada com sucesso!";
                     }
@@ -91,13 +91,13 @@ namespace Services
             }
             catch (SqlException)
             {
-                _contexto.Database.RollbackTransaction();
+                _contexto.Database?.RollbackTransaction();
 
                 return "Não foi possível se comunicar com a base de dados!";
             }
             catch (Exception ex)
             {
-                _contexto.Database.RollbackTransaction();
+                _contexto.Database?.RollbackTransaction();
 
                 return ex.Message;
             }
@@ -142,7 +142,7 @@ namespace Services
                     return "Conta Pessoa Física alterada com sucesso!";
                 }
                 else
-                    return "Conta inválido!";
+                    return "Conta inválida!";
             }
             catch (SqlException)
             {
