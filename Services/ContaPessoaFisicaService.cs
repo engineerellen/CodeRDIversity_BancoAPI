@@ -306,7 +306,6 @@ namespace Services
                         _contexto.Add(historico);
                         _contexto.SaveChanges();
 
-
                         return "Transação cadastrada com sucesso!";
                     }
                     else

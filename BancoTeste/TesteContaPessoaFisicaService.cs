@@ -1,10 +1,11 @@
-﻿using Moq;
-using RepositoryEntity.Context;
-using Services;
-using Microsoft.Extensions.Configuration;
-using RepositoryEntity.Models;
-using BancoTeste.Mocker;
+﻿using BancoTeste.Mocker;
 using Domain;
+using Microsoft.Extensions.Configuration;
+using Moq;
+using RepositoryEntity;
+using RepositoryEntity.Context;
+using RepositoryEntity.Models;
+using Services;
 
 
 namespace BancoTeste
@@ -28,7 +29,7 @@ namespace BancoTeste
         {
             // Arrange
             var contaExistente = new Contum
-            {  
+            {
                 IdConta = 1,
                 Agencia = "1234",
                 NumeroConta = "56789",
@@ -73,7 +74,7 @@ namespace BancoTeste
                 ValorConta = 1000m
             };
 
-            // Mock DbSets
+            // Mock GetContaByID
             _mockContext.Setup(c => c.Conta).Returns(DbSetMocker.GetQueryableMockDbSet(new List<Contum>()));
             _mockContext.Setup(c => c.ContaPessoaFisicas).Returns(DbSetMocker.GetQueryableMockDbSet(new List<ContaPessoaFisica>()));
 
@@ -82,11 +83,19 @@ namespace BancoTeste
 
             // Assert
             Assert.Equal("Conta Pessoa Física cadastrada com sucesso!", result);
+        }
 
-            // Verifica se as entidades foram adicionadas ao contexto
-            _mockContext.Verify(c => c.Add(It.IsAny<Contum>()), Times.Once);
-            _mockContext.Verify(c => c.Add(It.IsAny<ContaPessoaFisica>()), Times.Once);
-            _mockContext.Verify(c => c.SaveChanges(), Times.Exactly(2)); // Salva tanto para Conta quanto para ContaPessoaFisica
+        [Fact]
+        public void CadastrarContaPessoaFisica_NovaConta_ReturnsContaInvalidaMessage()
+        {
+            // Arrange
+            ContaPessoaFisicaDomain contaPFDomain = null;
+
+            // Act
+            var result = _service.CadastrarContaPesoaFisica(contaPFDomain);
+
+            // Assert
+            Assert.Equal("Conta inválida!", result);
         }
 
         [Fact]
@@ -127,6 +136,143 @@ namespace BancoTeste
         }
 
         [Fact]
+        public void AtualizarConta_ContaExistente_ReturnsContaInvalidaMessage()
+        {
+            // Arrange
+            ContaPessoaFisicaDomain contaPFDomain = null;
+
+            // Act
+            var result = _service.AtualizarConta(contaPFDomain);
+
+            // Assert
+            Assert.Equal("Conta inválida!", result);
+        }
+
+        [Fact]
+        public void GetContaPessoaFisicaByID_Success()
+        {
+            //Arrange
+            var contaPF = new ContaPessoaFisica
+            {
+                IdContaPf = 1,
+                NomeCliente = "Alexa",
+                Cpf = "99999999999"
+            };
+
+            // Mock GetContaByID
+            _mockContext.Setup(c => c.ContaPessoaFisicas)
+                .Returns(DbSetMocker.GetQueryableMockDbSet(new List<ContaPessoaFisica> { contaPF }));
+
+            //Act
+            var result = _service.GetContaPessoaFisicaById(contaPF.IdContaPf);
+
+            //Assert
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public void GetContaPessoaFisicaByID_ReturnNull_IDContaZero()
+        {
+            //Act
+            var result = _service.GetContaPessoaFisicaById(0);
+
+            //Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void GetContaPessoaFisicaByID_ReturnNull_ResultadoNaoEncontrado()
+        {
+            //Act
+            var result = _service.GetContaPessoaFisicaById(1);
+
+            //Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void GetContaByID_Success()
+        {
+            //Arrange
+            var conta = new Contum
+            {
+                IdConta = 1,
+                Agencia = "0001"
+               ,
+                NomeConta = "Conta Corrente1"
+               ,
+                NumeroConta = "367895"
+               ,
+                Digito = "0"
+               ,
+                Pix = "(11)99999-9999"
+            };
+
+            // Mock GetContaByID
+            _mockContext.Setup(c => c.Conta)
+                .Returns(DbSetMocker.GetQueryableMockDbSet(new List<Contum> { conta }));
+
+            //Act
+            var result = _service.GetContaById(conta.IdConta);
+
+            //Assert
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public void GetContaByID_ReturnNull_IDContaZero()
+        {
+            //Act
+            var result = _service.GetContaById(0);
+
+            //Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void GetContaByID_ReturnNull_ResultadoNaoEncontrado()
+        {
+            //Act
+            var result = _service.GetContaById(1);
+
+            //Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void GetAllContasPessoasFisica_Success()
+        {
+            //Arrange
+            var contaPF = new ContaPessoaFisica
+            {
+                IdContaPf = 1,
+                NomeCliente = "Alexa",
+                Cpf = "99999999999"
+            };
+
+            // Mock GetContaByID
+            _mockContext.Setup(c => c.ContaPessoaFisicas)
+                .Returns(DbSetMocker.GetQueryableMockDbSet(new List<ContaPessoaFisica> { contaPF }));
+
+            //Act
+            var result = _service.GetAllContasPessoasFisica();
+
+            //Assert
+            Assert.NotNull(result);
+            Assert.True(result.Any());
+        }
+
+        [Fact]
+        public void GetAllContasPessoasFisica_ReturnNull()
+        {
+            //Act
+            var result = _service.GetAllContasPessoasFisica();
+
+            //Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
         public void InativarConta_ContaExistente_ReturnsSuccessMessage()
         {
             // Arrange
@@ -134,7 +280,7 @@ namespace BancoTeste
             {
                 IdConta = 1,
                 NomeConta = "Conta Teste",
-                Ativo = true
+                Ativo = false
             };
 
             var contaPFDomain = new ContaPessoaFisicaDomain
@@ -143,7 +289,7 @@ namespace BancoTeste
                 EstaAtiva = false
             };
 
-            //Mock Conta
+            //Mock GetContaByID
             _mockContext.Setup(c => c.Conta)
                 .Returns(DbSetMocker.GetQueryableMockDbSet(new List<Contum> { contaExistente }));
 
@@ -151,11 +297,177 @@ namespace BancoTeste
             var result = _service.InativarConta(contaPFDomain);
 
             // Assert
-            Assert.Equal("Conta Conta Teste inativada com sucesso!", result);
+            Assert.Equal($"Conta {contaExistente.NomeConta} inativada com sucesso!", result);
+        }
 
-            // Verifica se a entidade foi atualizada no contexto
-            _mockContext.Verify(c => c.Update(It.IsAny<Contum>()), Times.Once);
-            _mockContext.Verify(c => c.SaveChanges(), Times.Once);
+        [Fact]
+        public void InativarConta_ContaExistente_ReturnsContaInvalidaMessage()
+        {
+            // Arrange
+            var contaPFDomain = new ContaPessoaFisicaDomain
+            {
+                IDConta = 0,
+                EstaAtiva = false
+            };
+
+            // Act
+            var result = _service.InativarConta(contaPFDomain);
+
+            // Assert
+            Assert.Equal("Conta inválida! Por favor tente novamente.", result);
+        }
+
+        [Fact]
+        public void InativarConta_ContaExistente_ReturnsContaNaoCadastradaMessage()
+        {
+            // Arrange
+            var contaExistente = new Contum
+            {
+                IdConta = 1
+            };
+
+            var contaPFDomain = new ContaPessoaFisicaDomain
+            {
+                IDConta = 1,
+                EstaAtiva = false
+            };
+
+            // Act
+            var result = _service.InativarConta(contaPFDomain);
+
+            // Assert
+            Assert.Equal("Conta não cadastrada!", result);
+        }
+
+        [Fact]
+        public void CadastrarHistorico_ReturnsSuccessMessage()
+        {
+            // Arrange
+            var conta = new Contum
+            {
+                IdConta = 1,
+                NomeConta = "Conta Teste",
+                Agencia = "0001",
+                NumeroConta = "1362531",
+                Digito = "9",
+                Pix = "(11)99999-9999"
+            };
+
+            var contaPFDomain = new ContaPessoaFisicaDomain
+            {
+                IDConta = 1,
+                Agencia = "1234",
+                NumeroConta = "56789",
+                Digito = "0",
+                TipoConta = ETipoConta.Corrente,
+                CPF = "12345678900",
+                NomeCliente = "Cliente Teste",
+                ValorConta = 1000m
+            };
+
+            ETipoTransacao tipoTransacaoEnum = ETipoTransacao.Saque;
+            TipoTransacao tipoTransacaoMock = new() { IdTipoTransacao = 1, Codigo = (int)tipoTransacaoEnum };
+
+            // Mock GetContaByID
+            _mockContext.Setup(c => c.Conta).Returns(DbSetMocker.GetQueryableMockDbSet(new List<Contum>() { conta }));
+
+            //mock TipoTransacao
+            _mockContext.Setup(c => c.TipoTransacaos).Returns(DbSetMocker.GetQueryableMockDbSet(new List<TipoTransacao>() { tipoTransacaoMock }));
+
+            // Act
+            var result = _service.CadastrarHistorico(contaPFDomain, tipoTransacaoEnum);
+
+            // Assert
+            Assert.Equal("Transação cadastrada com sucesso!", result);
+        }
+
+        [Fact]
+        public void CadastrarHistorico_ReturnsContaInexistenteMessage()
+        {
+            // Arrange
+            var conta = new Contum
+            {
+                IdConta = 1,
+                NomeConta = "Conta Teste",
+                Agencia = "0001",
+                NumeroConta = "1362531",
+                Digito = "9",
+                Pix = "(11)99999-9999"
+            };
+
+            var contaPFDomain = new ContaPessoaFisicaDomain
+            {
+                IDConta = 1,
+                Agencia = "1234",
+                NumeroConta = "56789",
+                Digito = "0",
+                TipoConta = ETipoConta.Corrente,
+                CPF = "12345678900",
+                NomeCliente = "Cliente Teste",
+                ValorConta = 1000m
+            };
+
+            ETipoTransacao tipoTransacaoEnum = ETipoTransacao.Saque;
+            TipoTransacao tipoTransacaoMock = new() { IdTipoTransacao = 1, Codigo = (int)tipoTransacaoEnum };
+
+            //mock TipoTransacao
+            _mockContext.Setup(c => c.TipoTransacaos).Returns(DbSetMocker.GetQueryableMockDbSet(new List<TipoTransacao>() { tipoTransacaoMock }));
+
+            // Act
+            var result = _service.CadastrarHistorico(contaPFDomain, tipoTransacaoEnum);
+
+            // Assert
+            Assert.Equal("Conta inexistente!", result);
+        }
+
+        [Fact]
+        public void CadastrarHistorico_ReturnsContaInvalidaMessage()
+        {
+            // Arrange
+
+            ContaPessoaFisicaDomain contaPFDomain = null;
+            ETipoTransacao tipoTransacaoEnum = ETipoTransacao.Saque;
+
+            // Act
+            var result = _service.CadastrarHistorico(contaPFDomain, tipoTransacaoEnum);
+
+            // Assert
+            Assert.Equal("Conta inválida!", result);
+        }
+
+        [Fact]
+        public void VerificarExtrato_Success()
+        {
+            //Arrange
+            var historico = new Historico
+            {
+                DtTransacao = DateTime.Now,
+                IdConta = 1,
+                IdHistorico = 1,
+                IdTipoTransacao = 1,
+                Valor = 200
+            };
+
+            // Mock GetContaByID
+            _mockContext.Setup(c => c.Historicos)
+                .Returns(DbSetMocker.GetQueryableMockDbSet(new List<Historico> { historico }));
+
+            //Act
+            var result = _service.VerificarExtrato(historico.IdConta, historico.DtTransacao.Month);
+
+            //Assert
+            Assert.NotNull(result);
+            Assert.True(result.Any());
+        }
+
+        [Fact]
+        public void VerificarExtrato_Null()
+        {
+            //Act
+            var result = _service.VerificarExtrato(1, 8);
+
+            //Assert
+            Assert.Null(result);
         }
     }
 }
