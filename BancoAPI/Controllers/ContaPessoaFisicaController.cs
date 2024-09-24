@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryEntity;
 using RepositoryEntity.Context;
@@ -23,6 +24,7 @@ namespace BancoAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult<List<ContaPessoaFisicaDomain>> Get()
         {
             try
