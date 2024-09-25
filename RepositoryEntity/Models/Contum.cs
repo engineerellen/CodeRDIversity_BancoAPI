@@ -27,5 +27,7 @@ public partial class Contum
 
     public virtual ICollection<ContaPessoaJuridica> ContaPessoaJuridicas { get; set; } = new List<ContaPessoaJuridica>();
 
+    public virtual ICollection<Historico> Historicos { get; set; } = new List<Historico>();
+
     public virtual TipoContum IdTipoContaNavigation { get; set; } = null!;
 }

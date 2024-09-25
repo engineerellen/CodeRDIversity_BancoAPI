@@ -7,12 +7,12 @@ using System.Text;
 
 namespace Services
 {
-    public class LoginServices
+    public class TokenServices
     {
         private readonly string? _key;
 
         IConfiguration configuration;
-        public LoginServices(IConfiguration config)
+        public TokenServices(IConfiguration config)
         {
             _key = config.GetValue<string>("Key");
             configuration = config;

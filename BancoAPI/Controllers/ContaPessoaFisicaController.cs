@@ -1,7 +1,7 @@
 ﻿using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RepositoryEntity;
+using RepositoryEntity.Models ;
 using RepositoryEntity.Context;
 using Services;
 

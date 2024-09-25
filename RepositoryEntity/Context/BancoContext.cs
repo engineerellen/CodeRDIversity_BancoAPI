@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RepositoryEntity.Models;
 
 namespace RepositoryEntity.Context;
 
 public partial class BancoContext : DbContext
 {
-
     public BancoContext()
     {
-
     }
 
     public BancoContext(DbContextOptions<BancoContext> options)
@@ -24,11 +20,13 @@ public partial class BancoContext : DbContext
 
     public virtual DbSet<Contum> Conta { get; set; }
 
-    public virtual DbSet<TipoContum> TipoConta { get; set; }
-
     public virtual DbSet<Historico> Historicos { get; set; }
 
+    public virtual DbSet<TipoContum> TipoConta { get; set; }
+
     public virtual DbSet<TipoTransacao> TipoTransacaos { get; set; }
+
+    public virtual DbSet<Usuario> Usuarios { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -131,6 +129,33 @@ public partial class BancoContext : DbContext
                 .HasConstraintName("FK_ID_TIPO_CONTA_CONTA_CORRENTE_TIPO_CONTA");
         });
 
+        modelBuilder.Entity<Historico>(entity =>
+        {
+            entity.HasKey(e => e.IdHistorico);
+
+            entity.ToTable("HISTORICO");
+
+            entity.Property(e => e.IdHistorico).HasColumnName("ID_HISTORICO");
+            entity.Property(e => e.DtTransacao)
+                .HasColumnType("datetime")
+                .HasColumnName("DT_Transacao");
+            entity.Property(e => e.IdConta).HasColumnName("ID_CONTA");
+            entity.Property(e => e.IdTipoTransacao).HasColumnName("ID_TipoTransacao");
+            entity.Property(e => e.Valor)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("VALOR");
+
+            entity.HasOne(d => d.IdContaNavigation).WithMany(p => p.Historicos)
+                .HasForeignKey(d => d.IdConta)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_HISTORICO_CONTA");
+
+            entity.HasOne(d => d.IdTipoTransacaoNavigation).WithMany(p => p.Historicos)
+                .HasForeignKey(d => d.IdTipoTransacao)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_HISTORICO_TipoTransacao");
+        });
+
         modelBuilder.Entity<TipoContum>(entity =>
         {
             entity.HasKey(e => e.IdTipoConta)
@@ -147,31 +172,6 @@ public partial class BancoContext : DbContext
                 .HasColumnName("DESCRICAO_TIPO");
         });
 
-        modelBuilder.Entity<Historico>(entity =>
-        {
-            entity.HasKey(e => e.IdHistorico)
-              .HasName("PK_HISTORICO")
-                .IsClustered(true);
-
-            entity.ToTable("HISTORICO");
-
-            entity.Property(e => e.IdHistorico).HasColumnName("ID_HISTORICO");
-            entity.Property(e => e.DtTransacao)
-                .HasColumnType("datetime")
-                .HasColumnName("DT_Transacao");
-            entity.Property(e => e.IdConta).HasColumnName("ID_CONTA");
-            entity.Property(e => e.IdTipoTransacao).HasColumnName("ID_TipoTransacao");
-            entity.Property(e => e.Valor)
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("VALOR");
-
-            entity.HasOne(d => d.IdTipoTransacaoNavigation).WithMany(p => p.Historicos)
-               .HasForeignKey(d => d.IdTipoTransacao)
-               .OnDelete(DeleteBehavior.ClientSetNull)
-               .HasConstraintName("FK_HISTORICO_TipoTransacao");
-        });
-
-
         modelBuilder.Entity<TipoTransacao>(entity =>
         {
             entity.HasKey(e => e.IdTipoTransacao);
@@ -182,6 +182,27 @@ public partial class BancoContext : DbContext
             entity.Property(e => e.Codigo).HasColumnName("CODIGO");
             entity.Property(e => e.Descricao)
                 .HasMaxLength(200)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<Usuario>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_User");
+
+            entity.ToTable("Usuario");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Email)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.SenhaHash)
+                .HasMaxLength(300)
+                .IsUnicode(false);
+            entity.Property(e => e.SenhaSalt)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.UserName)
+                .HasMaxLength(100)
                 .IsUnicode(false);
         });
 

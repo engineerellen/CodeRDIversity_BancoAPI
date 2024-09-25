@@ -1,8 +1,7 @@
-﻿using RepositoryEntity.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace RepositoryEntity;
+namespace RepositoryEntity.Models;
 
 public partial class Historico
 {
@@ -15,6 +14,8 @@ public partial class Historico
     public decimal Valor { get; set; }
 
     public int IdConta { get; set; }
+
+    public virtual Contum IdContaNavigation { get; set; } = null!;
 
     public virtual TipoTransacao IdTipoTransacaoNavigation { get; set; } = null!;
 }
