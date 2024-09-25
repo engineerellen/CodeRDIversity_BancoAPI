@@ -15,7 +15,7 @@ namespace BancoAPI.Controllers
         BancoContext _bancoContext;
 
         public UsuariosController(IConfiguration configuration, BancoContext bancoContext)
-        {  
+        {
             _configuration = configuration;
             _bancoContext = bancoContext;
             _service = new UsuarioService(_configuration, _bancoContext);
@@ -26,14 +26,14 @@ namespace BancoAPI.Controllers
         {
             try
             {
-              var user =   _service.Registro(novoUsuario);
+                var user = _service.Registro(novoUsuario);
 
                 if (user is not null)
                     return Created();
 
                 return BadRequest("Não foi possível inserir o usuario!");
             }
-            catch 
+            catch
             {
                 return BadRequest("Não foi possível inserir o usuario!");
             }
@@ -45,7 +45,7 @@ namespace BancoAPI.Controllers
         {
             try
             {
-              var user =  _service.Login(login);
+                var user = _service.Login(login);
 
                 if (user is not null)
                     return Ok($"{user.username},{user.email}");
